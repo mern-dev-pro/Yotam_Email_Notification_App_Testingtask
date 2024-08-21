@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 import styles from "./style.module.scss";
+import { BarLoader, ScaleLoader } from "react-spinners";
 
 type Props = {
   type?: "button" | "submit";
@@ -10,6 +11,7 @@ type Props = {
   icon?: React.ReactNode;
   className?: string;
   onClick?: VoidFunction;
+  isPending?: boolean;
 };
 
 const AppButton: React.FC<Props> = ({
@@ -19,6 +21,7 @@ const AppButton: React.FC<Props> = ({
   onClick = () => {},
   type = "button",
   variant = "primary",
+  isPending = false,
 }) => {
   return (
     <button
@@ -30,8 +33,14 @@ const AppButton: React.FC<Props> = ({
         [styles.warn]: variant === "warn",
       })}
     >
-      {!!icon && icon}
-      {label}
+      {isPending ? (
+        <ScaleLoader color="white" height={14} width={2} />
+      ) : (
+        <>
+          {!!icon && icon}
+          {label}
+        </>
+      )}
     </button>
   );
 };

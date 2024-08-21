@@ -37,6 +37,7 @@ const schema = yup.object().shape({
 
 const HomePageHeader = () => {
   const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   /**
    * Configure react hook form
@@ -53,8 +54,15 @@ const HomePageHeader = () => {
   });
   const watchInterval = watch("interval");
 
-  const onSubmit = (data: FieldValues) => {
-    console.log("data: ", data);
+  const onSubmit = async (data: FieldValues) => {
+    try {
+      setLoading(true);
+      await fetch("/api/notification", { method: "POST", body: JSON.stringify(data) });
+    } catch (error) {
+    } finally {
+      setLoading(false);
+      setOpenModal(false);
+    }
   };
 
   return (
@@ -182,7 +190,7 @@ const HomePageHeader = () => {
             </div>
           </div>
           <div className={styles.panelFooter}>
-            <AppButton type="submit" label="Ok" className={styles.button} />
+            <AppButton type="submit" label="Ok" className={styles.button} isPending={loading} />
             <AppButton
               variant="danger"
               label="Cancel"
