@@ -8,4 +8,8 @@
   .input {
     @apply w-full border border-gray rounded-md py-1.5 px-2 focus:outline-none;
   }
+
+  .error {
+    @apply text-danger text-xs ml-2;
+  }
 }

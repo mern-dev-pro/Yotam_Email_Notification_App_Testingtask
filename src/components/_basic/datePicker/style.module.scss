@@ -8,4 +8,8 @@
   .wrapper {
     @apply border border-gray py-1.5 px-2 rounded-md focus:outline-none w-full;
   }
+
+  .error {
+    @apply text-danger text-xs ml-2;
+  }
 }

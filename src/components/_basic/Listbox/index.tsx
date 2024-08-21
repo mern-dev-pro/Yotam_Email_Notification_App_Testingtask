@@ -8,15 +8,19 @@ import styles from "./style.module.scss";
 
 type Props = {
   options: IOption[];
+  label?: string;
+  errorMsg?: string;
+  value: IOption;
+  onChange: (val: IOption) => void;
 };
 
-const AppListbox: React.FC<Props> = ({ options }) => {
-  const [selected, setSelected] = useState(options[0]);
+const AppListbox: React.FC<Props> = ({ options, label = "", errorMsg = "", value, onChange }) => {
   return (
     <div className={styles.wrapper}>
-      <Listbox value={selected} onChange={setSelected}>
+      {!!label && <label className={styles.label}>{label}</label>}
+      <Listbox value={value} onChange={onChange}>
         <ListboxButton className={styles.button}>
-          {selected.label}
+          {value.label}
           <ChevronDownIcon className={styles.buttonIcon} aria-hidden="true" />
         </ListboxButton>
         <ListboxOptions
@@ -39,6 +43,7 @@ const AppListbox: React.FC<Props> = ({ options }) => {
           ))}
         </ListboxOptions>
       </Listbox>
+      {!!errorMsg && <span className={styles.error}>{errorMsg}</span>}
     </div>
   );
 };

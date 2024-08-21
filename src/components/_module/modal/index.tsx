@@ -25,10 +25,6 @@ const AppModal: React.FC<Props> = ({ isOpen, setIsOpen, children, heading = "" }
               {heading}
             </DialogTitle>
             <div className={styles.panelContent}>{children}</div>
-            <div className={styles.panelFooter}>
-              <AppButton label="Ok" className={styles.button} />
-              <AppButton variant="danger" label="Cancel" className={styles.button} onClick={close} />
-            </div>
           </DialogPanel>
         </div>
       </div>

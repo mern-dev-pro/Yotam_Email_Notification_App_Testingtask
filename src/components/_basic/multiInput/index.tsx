@@ -1,16 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./style.module.scss";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
 type Props = {
   label?: string;
+  value: string[];
+  onChange: (val: string[]) => void;
+  errorMsg?: string;
 };
 
-const AppMultiInput: React.FC<Props> = ({ label }) => {
+const AppMultiInput: React.FC<Props> = ({ label, value, onChange, errorMsg = "" }) => {
   const [val, setVal] = useState<string>("");
   const [selectedList, setSelectedList] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (selectedList.length > 0) onChange(selectedList);
+  }, [selectedList]);
 
   return (
     <div className={styles.wrapper}>
@@ -53,6 +60,7 @@ const AppMultiInput: React.FC<Props> = ({ label }) => {
           </div>
         ))}
       </div>
+      {!!errorMsg && <span className={styles.error}>{errorMsg}</span>}
     </div>
   );
 };

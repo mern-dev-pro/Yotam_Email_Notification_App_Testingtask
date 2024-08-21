@@ -5,12 +5,8 @@
 .modalContents {
   @apply grid grid-cols-1 md:grid-cols-2 gap-4;
 
-  .interval {
-    @apply col-span-2 flex items-end gap-2;
-
-    .duration {
-      @apply max-w-24;
-    }
+  .duration {
+    @apply max-w-24;
   }
 
   .emails {
@@ -19,5 +15,13 @@
 
   .searchString {
     @apply w-full col-span-2;
+  }
+}
+
+.panelFooter {
+  @apply mt-4 flex justify-center gap-4;
+
+  .button {
+    @apply min-w-24;
   }
 }

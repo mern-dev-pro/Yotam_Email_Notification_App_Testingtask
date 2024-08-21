@@ -16,14 +16,6 @@
 
         .panelContent {
         }
-
-        .panelFooter {
-          @apply mt-4 flex justify-center gap-4;
-
-          .button {
-            @apply min-w-24;
-          }
-        }
       }
     }
   }
