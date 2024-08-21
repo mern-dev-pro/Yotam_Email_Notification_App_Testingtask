@@ -9,6 +9,10 @@
     @apply max-w-24;
   }
 
+  .daySelector {
+    @apply col-span-2 flex items-center flex-wrap gap-3;
+  }
+
   .emails {
     @apply col-span-2;
   }

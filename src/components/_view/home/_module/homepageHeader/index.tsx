@@ -14,7 +14,7 @@ import AppTextInput from "../../../../_basic/textInput";
 import { IOption } from "../../../../../utils/type";
 
 import styles from "./style.module.scss";
-import { time } from "console";
+import AppCheckbox from "../../../../_basic/checkbox";
 
 const intervalOptions: IOption[] = [
   { label: "Week", value: "week" },
@@ -22,12 +22,15 @@ const intervalOptions: IOption[] = [
   { label: "Hour", value: "hour" },
 ];
 
+const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+
 const schema = yup.object().shape({
   interval: yup.string().required("Interval is a required field"),
   intervalDuration: yup.number().min(0),
   searchString: yup.string().required("Search string is a required field"),
   relevancyScore: yup.number().min(0),
-  date: yup.date().required("Date is a required field"),
+  day: yup.array(),
+  date: yup.date(),
   time: yup.date().required("Time is a required field"),
   emails: yup.array().required("Emails is a required field"),
 });
@@ -42,11 +45,13 @@ const HomePageHeader = () => {
     register,
     control,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: { interval: "week", intervalDuration: 1, relevancyScore: 0.1, emails: [] },
   });
+  const watchInterval = watch("interval");
 
   const onSubmit = (data: FieldValues) => {
     console.log("data: ", data);
@@ -65,7 +70,7 @@ const HomePageHeader = () => {
                 const selected = intervalOptions.find((item) => item.value === value);
                 return (
                   <AppListbox
-                    label="Variant"
+                    label="Interval unit"
                     options={intervalOptions}
                     value={selected ?? intervalOptions[0]}
                     onChange={(val) => {
@@ -77,24 +82,61 @@ const HomePageHeader = () => {
               }}
             />
             <div className={styles.duration}>
-              <AppTextInput
-                register={register("intervalDuration")}
-                label="Interval"
-                className={styles.duration}
-                errorMsg={errors.intervalDuration?.message}
-              />
+              {watchInterval !== "week" && (
+                <AppTextInput
+                  register={register("intervalDuration")}
+                  label="Interval"
+                  className={styles.duration}
+                  errorMsg={errors.intervalDuration?.message}
+                />
+              )}
             </div>
-            <div>
+            {watchInterval === "week" && (
+              <div className={styles.daySelector}>
+                {days.map((day) => {
+                  return (
+                    <Controller
+                      key={day}
+                      name="day"
+                      control={control}
+                      render={({ field: { value, onChange } }) => {
+                        return (
+                          <AppCheckbox
+                            name="day"
+                            value={day}
+                            label={day}
+                            checked={!!(value ?? []).find((item) => item === day)}
+                            onChange={(val) => {
+                              onChange(
+                                val ? [...(value ?? []), day] : (value ?? []).filter((item: string) => item !== day),
+                              );
+                            }}
+                          />
+                        );
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            )}
+            {watchInterval !== "week" && (
               <Controller
                 name="date"
                 control={control}
                 render={({ field: { value, onChange } }) => {
                   return (
-                    <AppDatePicker label="Date" value={value} onChange={onChange} errorMsg={errors.date?.message} />
+                    <AppDatePicker
+                      disabled={watchInterval === "week"}
+                      label="Date"
+                      value={value ?? new Date()}
+                      onChange={onChange}
+                      errorMsg={errors.date?.message}
+                    />
                   );
                 }}
               />
-            </div>
+            )}
+
             <div>
               <Controller
                 name="time"
@@ -103,7 +145,7 @@ const HomePageHeader = () => {
                   return (
                     <AppDatePicker
                       variant="time"
-                      label="Date"
+                      label="Time"
                       value={value}
                       onChange={onChange}
                       errorMsg={errors.time?.message}

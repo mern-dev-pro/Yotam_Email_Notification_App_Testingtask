@@ -1,0 +1,7 @@
+.wrapper {
+  @apply flex items-center gap-1;
+
+  .label {
+    @apply text-sm text-black;
+  }
+}
