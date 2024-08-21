@@ -13,6 +13,10 @@
     }
   }
 
+  .emails {
+    @apply col-span-2;
+  }
+
   .searchString {
     @apply w-full col-span-2;
   }

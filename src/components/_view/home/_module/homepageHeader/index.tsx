@@ -1,14 +1,15 @@
 "use client";
 import React, { useState } from "react";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 import AppButton from "../../../../_basic/button";
 import AppListbox from "../../../../_basic/Listbox";
 import AppModal from "../../../../_module/modal";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import AppTextInput from "../../../../_basic/textInput";
 import { IOption } from "../../../../../utils/type";
 
 import styles from "./style.module.scss";
-import AppTextInput from "../../../../_basic/textInput";
+import AppMultiInput from "../../../../_basic/multiInput";
 
 const intervalOptions: IOption[] = [
   { label: "Week", value: "week" },
@@ -33,7 +34,9 @@ const HomePageHeader = () => {
           <div className={styles.searchString}>
             <AppTextInput type="string" label="Search string" />
           </div>
-          <div>Emails</div>
+          <div className={styles.emails}>
+            <AppMultiInput label="Emails" />
+          </div>
           <div>
             <AppTextInput type="number" label="Relevancy score" />
           </div>

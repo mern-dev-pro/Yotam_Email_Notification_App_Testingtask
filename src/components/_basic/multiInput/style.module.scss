@@ -1,0 +1,31 @@
+.wrapper {
+  @apply w-full;
+
+  .label {
+    @apply text-xs text-darkGray;
+  }
+
+  .inputWrapper {
+    @apply flex items-center gap-4;
+
+    .input {
+      @apply w-full border border-gray rounded py-1.5 px-2 focus:outline-none;
+    }
+
+    .button {
+      @apply bg-primary text-white p-1.5 rounded;
+    }
+  }
+
+  .selectedList {
+    @apply flex items-center flex-wrap gap-2 mt-2;
+
+    .item {
+      @apply bg-primary text-white px-2 py-1 rounded-full flex items-center gap-2;
+
+      .button {
+        @apply bg-white rounded-full text-primary;
+      }
+    }
+  }
+}
