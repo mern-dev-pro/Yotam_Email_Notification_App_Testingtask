@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/navigation";
 import * as yup from "yup";
 
 import AppButton from "../../../../_basic/button";
@@ -11,10 +12,11 @@ import AppListbox from "../../../../_basic/Listbox";
 import AppModal from "../../../../_module/modal";
 import AppMultiInput from "../../../../_basic/multiInput";
 import AppTextInput from "../../../../_basic/textInput";
+import AppCheckbox from "../../../../_basic/checkbox";
 import { IOption } from "../../../../../utils/type";
 
 import styles from "./style.module.scss";
-import AppCheckbox from "../../../../_basic/checkbox";
+import { toast } from "react-toastify";
 
 const intervalOptions: IOption[] = [
   { label: "Week", value: "week" },
@@ -38,6 +40,7 @@ const schema = yup.object().shape({
 const HomePageHeader = () => {
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   /**
    * Configure react hook form
@@ -54,14 +57,29 @@ const HomePageHeader = () => {
   });
   const watchInterval = watch("interval");
 
+  /**
+   * Prevent enter key event for form
+   * @param e form event
+   */
+  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === "Enter") e.preventDefault();
+  };
+
+  /**
+   * Create a new notification plan (record a notification to mongoDB)
+   * @param data form data
+   */
   const onSubmit = async (data: FieldValues) => {
     try {
       setLoading(true);
       await fetch("/api/notification", { method: "POST", body: JSON.stringify(data) });
+      toast("A notification plan is saved!");
     } catch (error) {
+      toast("Failed to create! try again later");
     } finally {
       setLoading(false);
       setOpenModal(false);
+      router.refresh();
     }
   };
 
@@ -69,7 +87,7 @@ const HomePageHeader = () => {
     <div className={styles.header}>
       <AppButton onClick={() => setOpenModal(true)} label="Create" icon={<PlusIcon width={24} />} />
       <AppModal heading="Create a new notification plan" isOpen={openModal} setIsOpen={setOpenModal}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => checkKeyDown(e)}>
           <div className={styles.modalContents}>
             <Controller
               name="interval"
