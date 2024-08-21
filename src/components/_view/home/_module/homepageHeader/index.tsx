@@ -85,7 +85,7 @@ const HomePageHeader = () => {
               {watchInterval !== "week" && (
                 <AppTextInput
                   register={register("intervalDuration")}
-                  label="Interval"
+                  label="Length"
                   className={styles.duration}
                   errorMsg={errors.intervalDuration?.message}
                 />
