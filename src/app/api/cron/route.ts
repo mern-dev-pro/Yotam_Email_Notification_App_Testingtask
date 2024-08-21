@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
+import { sendMail } from "../../../utils/sendgrid";
 
 export async function GET() {
-  const result = "Helo, World! This is CRON route.";
-  console.log("result: ", result);
+  try {
+    await sendMail("koalah86@gmail.com", "Testing search");
+  } catch (error) {
+    console.log("error: ", error);
+  }
 
-  return NextResponse.json({ data: result });
+  return NextResponse.json({ message: "success" });
 }
