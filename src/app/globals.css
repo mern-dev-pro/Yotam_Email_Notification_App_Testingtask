@@ -22,3 +22,7 @@
     text-wrap: balance;
   }
 }
+
+.react-datepicker-wrapper {
+  @apply w-full
+}

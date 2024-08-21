@@ -9,7 +9,7 @@
     @apply flex items-center gap-4;
 
     .input {
-      @apply w-full border border-gray rounded py-1.5 px-2 focus:outline-none;
+      @apply w-full border border-gray rounded-md py-1.5 px-2 focus:outline-none;
     }
 
     .button {

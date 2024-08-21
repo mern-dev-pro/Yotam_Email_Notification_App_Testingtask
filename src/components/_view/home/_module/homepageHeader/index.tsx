@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/solid";
 
 import AppButton from "../../../../_basic/button";
+import AppDatePicker from "../../../../_basic/datePicker";
 import AppListbox from "../../../../_basic/Listbox";
 import AppModal from "../../../../_module/modal";
+import AppMultiInput from "../../../../_basic/multiInput";
 import AppTextInput from "../../../../_basic/textInput";
 import { IOption } from "../../../../../utils/type";
 
 import styles from "./style.module.scss";
-import AppMultiInput from "../../../../_basic/multiInput";
 
 const intervalOptions: IOption[] = [
   { label: "Week", value: "week" },
@@ -26,11 +27,15 @@ const HomePageHeader = () => {
       <AppModal heading="Create a new notification plan" isOpen={openModal} setIsOpen={setOpenModal}>
         <div className={styles.modalContents}>
           <div className={styles.interval}>
-            <AppTextInput type="number" label="Interval" className={styles.duration} />
             <AppListbox options={intervalOptions} />
+            <AppTextInput type="number" label="Interval" className={styles.duration} />
           </div>
-          <div>Date</div>
-          <div>Time</div>
+          <div>
+            <AppDatePicker label="Date" />
+          </div>
+          <div>
+            <AppDatePicker variant="time" label="Time" />
+          </div>
           <div className={styles.searchString}>
             <AppTextInput type="string" label="Search string" />
           </div>
