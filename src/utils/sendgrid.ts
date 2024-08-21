@@ -21,9 +21,9 @@ export const sendMail = async (email: string, searchString: string) => {
         console.log(response[0].headers);
       })
       .catch((error) => {
-        throw Error("Failed sending mail");
+        throw Error(error?.response?.body?.errors[0]?.message);
       });
-  } catch (error) {
-    throw Error("Failed sending mail");
+  } catch (error: any) {
+    throw Error(`${error?.message}`);
   }
 };
