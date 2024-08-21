@@ -33,7 +33,9 @@ const HomePage = async () => {
               {notifications.map((notification, idx) => (
                 <div className={styles.tableRow} key={idx}>
                   <div>{notification.interval}</div>
-                  <div className={styles.date}>{notification.date ? format(notification.date, "MM/dd/yyyy") : ""}</div>
+                  <div className={styles.date}>
+                    {notification.date ? format(notification.date, "MM/dd/yyyy") : notification?.day?.join(", ")}
+                  </div>
                   <div>{notification?.time ? format(notification?.time, "HH:mm") : ""}</div>
                   <div className={styles.query}>{notification?.searchString}</div>
                   <div className={styles.emails}>{notification?.emails?.join(", ")}</div>

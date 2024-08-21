@@ -8,7 +8,7 @@ export interface INotification {
   intervalDuration?: number;
   searchString: string;
   relevancyScore: number;
-  day?: string[];
+  day?: number[];
   date: Date;
   time: Date;
   emails: string[];
