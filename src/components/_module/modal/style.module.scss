@@ -1,0 +1,30 @@
+.wrapper {
+  @apply relative z-10 focus:outline-none;
+
+  .contents {
+    @apply fixed inset-0 z-10 w-screen bg-black bg-opacity-55 overflow-y-auto;
+
+    .panelWrapper {
+      @apply flex min-h-full items-center justify-center p-4;
+
+      .panel {
+        @apply w-full max-w-xl rounded-2xl bg-white shadow-md p-6 backdrop-blur-2xl duration-300 ease-out;
+
+        .panelTitle {
+          @apply text-base/7 font-medium text-black;
+        }
+
+        .panelContent {
+        }
+
+        .panelFooter {
+          @apply mt-4 flex justify-center gap-4;
+
+          .button {
+            @apply min-w-24;
+          }
+        }
+      }
+    }
+  }
+}

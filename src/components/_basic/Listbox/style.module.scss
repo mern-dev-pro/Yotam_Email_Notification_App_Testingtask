@@ -1,0 +1,15 @@
+.wrapper {
+  @apply max-w-52 w-full;
+
+  .button {
+    @apply relative block w-full rounded-lg bg-white border border-gray py-1.5 pr-8 pl-3 text-left text-sm/6 text-black focus:outline-none;
+
+    .buttonIcon {
+      @apply pointer-events-none absolute top-2.5 right-2.5 size-4 fill-black;
+    }
+  }
+
+  .options {
+    @apply w-52 z-50 rounded-xl border border-gray bg-white p-1 focus:outline-none mt-0.5 transition duration-100 ease-in;
+  }
+}

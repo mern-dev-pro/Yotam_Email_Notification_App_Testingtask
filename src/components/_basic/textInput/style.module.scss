@@ -1,0 +1,11 @@
+.wrapper {
+  @apply w-full;
+
+  .label {
+    @apply text-xs text-darkGray;
+  }
+
+  .input {
+    @apply w-full border border-gray rounded py-1.5 px-2 focus:outline-none;
+  }
+}

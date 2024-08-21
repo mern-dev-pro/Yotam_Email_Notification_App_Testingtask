@@ -1,3 +1,47 @@
 .wrapper {
   @apply w-full py-4;
+
+  .table {
+    @apply w-full border-t border-darkGray mt-4 overflow-auto text-sm;
+
+    .query {
+      @apply col-span-2;
+    }
+
+    .emails {
+      @apply col-span-3;
+    }
+
+    .date {
+      @apply col-span-2;
+    }
+
+    .score {
+      @apply col-span-2;
+    }
+
+    .actions {
+      @apply flex items-center gap-4;
+
+      .editButton {
+        @apply text-primary;
+      }
+
+      .deleteButton {
+        @apply text-danger;
+      }
+    }
+
+    .tableHeader {
+      @apply grid grid-cols-12 gap-3 bg-gray items-center px-2 py-3 rounded-sm min-w-[1100px];
+    }
+
+    .tableBody {
+      @apply min-w-[1100px];
+
+      .tableRow {
+        @apply grid grid-cols-12 gap-3 items-center px-2 py-3 rounded-sm;
+      }
+    }
+  }
 }

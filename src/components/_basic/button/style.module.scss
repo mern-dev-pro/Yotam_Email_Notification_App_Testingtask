@@ -1,5 +1,5 @@
 .wrapper {
-  @apply bg-primary text-white py-3 px-4 rounded-md flex items-center gap-3 transition-colors duration-300;
+  @apply bg-primary text-white text-center py-2 px-4 rounded-md flex items-center justify-center gap-3 transition-colors duration-300;
 
   &:focus {
     @apply outline-none right-0;
@@ -7,5 +7,17 @@
 
   &:hover {
     @apply bg-opacity-80;
+  }
+
+  &.primary {
+    @apply bg-primary;
+  }
+
+  &.danger {
+    @apply bg-danger;
+  }
+
+  &.warn {
+    @apply bg-yellow-400;
   }
 }

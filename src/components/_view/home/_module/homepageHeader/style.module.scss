@@ -1,3 +1,19 @@
 .header {
   @apply flex items-end justify-end;
 }
+
+.modalContents {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+
+  .interval {
+    @apply col-span-2 flex items-end gap-2;
+
+    .duration {
+      @apply max-w-24;
+    }
+  }
+
+  .searchString {
+    @apply w-full col-span-2;
+  }
+}
