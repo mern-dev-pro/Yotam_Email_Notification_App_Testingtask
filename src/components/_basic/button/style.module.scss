@@ -1,0 +1,11 @@
+.wrapper {
+  @apply bg-primary text-white py-3 px-4 rounded-md flex items-center gap-3 transition-colors duration-300;
+
+  &:focus {
+    @apply outline-none right-0;
+  }
+
+  &:hover {
+    @apply bg-opacity-80;
+  }
+}

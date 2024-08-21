@@ -1,0 +1,11 @@
+.wrapper {
+  @apply bg-primary text-white py-4 sticky top-0;
+
+  .heading {
+    @apply text-2xl font-semibold;
+  }
+
+  .description {
+    @apply text-base;
+  }
+}
