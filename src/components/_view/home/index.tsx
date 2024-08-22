@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import ActionForNotification from "./_module/actionForNotification";
 import AppContainer from "../../../layouts/container";
 import NotificationManager from "./_module/notificationManager";
-import { get } from "../../../app/api/notification/route";
+import { get } from "../../../server/actions";
 
 import styles from "./style.module.scss";
 
