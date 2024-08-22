@@ -29,10 +29,22 @@ const schema = yup.object().shape({
   intervalDuration: yup.number().min(0),
   searchString: yup.string().required("Search string is a required field"),
   relevancyScore: yup.number().min(0),
-  day: yup.array(),
-  date: yup.date(),
-  time: yup.date().required("Time is a required field"),
-  emails: yup.array().required("Emails is a required field"),
+  day: yup
+    .array(yup.string())
+    .when("interval", ([interval], schema) =>
+      interval === "week" ? schema.min(1, "Email is a required field") : schema,
+    ),
+  date: yup
+    .date()
+    .when("interval", ([interval], schema) =>
+      interval === "day" ? schema.required("Date is required field") : schema,
+    ),
+  time: yup.date(),
+  emails: yup
+    .array(yup.string().email())
+    .min(1, "Email is a required field")
+    .max(1, "You can use only one email for current version")
+    .required("Emails is a required field"),
 });
 
 const HomePageHeader = () => {
@@ -72,11 +84,18 @@ const HomePageHeader = () => {
       setLoading(true);
       var dateForNextDay = new Date();
       const mappedPlannedDays = (data.day ?? []).map((day: string) => days.findIndex((item) => day === item)).sort();
-      dateForNextDay.setDate(dateForNextDay.getDate() + ((mappedPlannedDays[0] + 7 - dateForNextDay.getDay()) % 7));
+      const currentDay = dateForNextDay.getDay();
+      const nearestNextDay = mappedPlannedDays?.find((item: number) => {
+        if (item > currentDay) return true;
+        else false;
+      });
+      dateForNextDay.setDate(
+        dateForNextDay.getDate() + ((nearestNextDay ?? mappedPlannedDays[0] + 7 - dateForNextDay.getDay()) % 7),
+      );
 
       const body = {
         ...data,
-        time: new Date(data.time),
+        time: data.time ? new Date(data.time) : new Date(),
         date: data.date ? new Date(data.date) : new Date(),
         plannedDate: data.date ? new Date(data.date) : dateForNextDay,
       };
@@ -84,7 +103,6 @@ const HomePageHeader = () => {
       toast("A notification plan is saved!");
       setOpenModal(false);
     } catch (error) {
-      console.log("error: ", error);
       toast("Failed to create! try again later");
     } finally {
       setLoading(false);
@@ -143,7 +161,9 @@ const HomePageHeader = () => {
                             checked={!!(value ?? []).find((item) => item === day)}
                             onChange={(val) => {
                               onChange(
-                                val ? [...(value ?? []), day] : (value ?? []).filter((item: string) => item !== day),
+                                val
+                                  ? [...(value ?? []), day]
+                                  : ((value as string[]) ?? []).filter((item: string) => item !== day),
                               );
                             }}
                           />
@@ -163,7 +183,7 @@ const HomePageHeader = () => {
                     <AppDatePicker
                       disabled={watchInterval === "week"}
                       label="Date"
-                      value={value ?? new Date()}
+                      value={value}
                       onChange={onChange}
                       errorMsg={errors.date?.message}
                     />
@@ -184,6 +204,7 @@ const HomePageHeader = () => {
                       value={value}
                       onChange={onChange}
                       errorMsg={errors.time?.message}
+                      disabled
                     />
                   );
                 }}
@@ -203,7 +224,12 @@ const HomePageHeader = () => {
                 control={control}
                 render={({ field: { value, onChange } }) => {
                   return (
-                    <AppMultiInput label="Emails" value={value} onChange={onChange} errorMsg={errors.emails?.message} />
+                    <AppMultiInput
+                      label="Emails"
+                      value={value as string[]}
+                      onChange={onChange}
+                      errorMsg={errors.emails?.message}
+                    />
                   );
                 }}
               />

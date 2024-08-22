@@ -9,7 +9,7 @@ type Props = {
   label?: string;
   variant?: "date" | "time";
   disabled?: boolean;
-  value: Date;
+  value?: Date;
   onChange: (val: Date) => void;
   errorMsg?: string;
 };

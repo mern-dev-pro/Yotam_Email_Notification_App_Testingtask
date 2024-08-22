@@ -82,7 +82,6 @@ const send = async () => {
 export async function GET() {
   try {
     await send();
-    // await sendMail(["koalah86@gmail.com"], "Test");
     return NextResponse.json({ message: "success" });
   } catch (error) {
     return NextResponse.json({ message: "failed" });

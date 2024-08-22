@@ -16,7 +16,7 @@ const AppMultiInput: React.FC<Props> = ({ label, value, onChange, errorMsg = "" 
   const [selectedList, setSelectedList] = useState<string[]>([]);
 
   useEffect(() => {
-    if (selectedList.length > 0) onChange(selectedList);
+    onChange(selectedList);
   }, [selectedList]);
 
   return (
