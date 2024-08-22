@@ -1,6 +1,6 @@
 import { client } from "../../../utils/mongo";
 import { NextResponse } from "next/server";
-import { sendMail } from "../../../utils/sendgrid";
+import { sendMail } from "../../../utils/mailerSend";
 import { add } from "date-fns";
 
 const dbName = process.env.MONGODB_DB_NAME;
@@ -23,11 +23,7 @@ const send = async () => {
 
         if (distanceDay === 0) {
           try {
-            await Promise.all(
-              (notification.emails ?? []).forEach(async (email: string) => {
-                await sendMail(email, notification.searchString);
-              }),
-            );
+            await Promise.all((notification.emails ?? []).forEach(async (email: string) => {}));
             client
               .db(dbName)
               .collection("notifications")
@@ -54,9 +50,9 @@ const send = async () => {
 
 export async function GET() {
   try {
-    await send();
+    await sendMail(["koalah86@gmail.com"], "Test");
     return NextResponse.json({ message: "success" });
   } catch (error) {
-    return NextResponse.error();
+    return NextResponse.json({ message: "failed" });
   }
 }
