@@ -28,7 +28,7 @@ const ActionForNotification: React.FC<Props> = ({ id, notification }) => {
       setOpenDelete(false);
       router.refresh();
     } catch (error) {
-      toast.success("Failed to delete, try again later!");
+      toast.error("Failed to delete, try again later!");
     } finally {
       setDeleteLoading(false);
     }

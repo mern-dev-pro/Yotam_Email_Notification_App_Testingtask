@@ -114,11 +114,11 @@ const NotificationManager: React.FC<Props> = ({ mode = "create", id = "", notifi
       } else {
         await fetch("/api/notification", { method: "POST", body: JSON.stringify(body) });
       }
-      toast("A notification plan is saved!");
+      toast.success("A notification plan is saved!");
       setOpenModal(false);
       router.refresh();
     } catch (error) {
-      toast("Failed to create! try again later");
+      toast.error("Failed to create! try again later");
     } finally {
       setLoading(false);
     }
