@@ -5,15 +5,17 @@ import { format } from "date-fns";
 import ActionForNotification from "./_module/actionForNotification";
 import AppContainer from "../../../layouts/container";
 import NotificationManager from "./_module/notificationManager";
-import { client } from "../../../utils/mongo";
 
 import styles from "./style.module.scss";
 
 const HomePage = async () => {
+
   try {
-    await client.connect();
-    const notificationsRes = client.db(process.env.MONGODB_DB_NAME).collection("notifications").find();
-    const notifications = await notificationsRes.toArray();
+    const notificationRes = await fetch(
+      `${process.env.DOMAIN}/api/notification`,
+      { method: "GET" },
+    );
+    const notifications = await notificationRes.json();
 
     return (
       <section className={styles.wrapper}>
@@ -30,7 +32,7 @@ const HomePage = async () => {
               <div>Action</div>
             </div>
             <div className={styles.tableBody}>
-              {notifications.map((notification, idx) => (
+              {notifications.map((notification: any, idx: number) => (
                 <div className={styles.tableRow} key={idx}>
                   <div>{notification.interval}</div>
                   <div className={styles.date}>
@@ -56,7 +58,6 @@ const HomePage = async () => {
       </section>
     );
   } catch (error) {
-    await client.close();
     return <div className={styles.errorScreen}>Something went wrong! DB connection failed</div>;
   }
 };
