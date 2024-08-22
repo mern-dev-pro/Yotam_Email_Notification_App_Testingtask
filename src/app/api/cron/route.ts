@@ -1,7 +1,6 @@
 import { client } from "../../../utils/mongo";
 import { NextResponse } from "next/server";
 import { sendMail } from "../../../utils/mailerSend";
-import { add } from "date-fns";
 
 const dbName = process.env.MONGODB_DB_NAME;
 const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -14,7 +13,6 @@ const send = async () => {
 
   notifications.forEach(async (notification) => {
     const plannedDate = notification?.plannedDate;
-    const intervalLength = notification.intervalDuration;
 
     if (plannedDate) {
       if (notification.interval === "week") {
@@ -23,18 +21,6 @@ const send = async () => {
 
         if (distanceDay === 0) {
           try {
-            await Promise.all((notification.emails ?? []).forEach(async (email: string) => {}));
-            client
-              .db(dbName)
-              .collection("notifications")
-              .updateOne(
-                { _id: notification._id },
-                {
-                  $set: {
-                    plannedDate: add(new Date(), { days: plannedDate.getDay() }),
-                  },
-                },
-              );
           } catch (error) {}
         }
       }
@@ -50,6 +36,7 @@ const send = async () => {
 
 export async function GET() {
   try {
+    await send();
     await sendMail(["koalah86@gmail.com"], "Test");
     return NextResponse.json({ message: "success" });
   } catch (error) {
