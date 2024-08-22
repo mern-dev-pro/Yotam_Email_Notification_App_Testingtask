@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import classNames from "classnames";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
@@ -11,6 +11,7 @@ type Props = {
   label?: string;
   errorMsg?: string;
   value: IOption;
+  // eslint-disable-next-line no-unused-vars
   onChange: (val: IOption) => void;
 };
 

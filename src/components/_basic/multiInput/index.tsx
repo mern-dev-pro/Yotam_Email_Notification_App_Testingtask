@@ -7,6 +7,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 type Props = {
   label?: string;
   value: string[];
+  // eslint-disable-next-line no-unused-vars
   onChange: (val: string[]) => void;
   errorMsg?: string;
 };
