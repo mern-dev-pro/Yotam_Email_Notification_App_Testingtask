@@ -14,4 +14,5 @@ export interface INotification {
   date: Date;
   time: Date;
   emails: string[];
+  plannedDate?: Date;
 }

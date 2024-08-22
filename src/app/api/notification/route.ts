@@ -3,7 +3,7 @@ import { INotification } from "../../../utils/type";
 
 const dbName = process.env.MONGODB_DB_NAME;
 
-async function get() {
+export async function get() {
   try {
     await client.connect();
     const notifications = client.db(dbName).collection("notifications").find();
@@ -14,7 +14,7 @@ async function get() {
   }
 }
 
-async function create(data: INotification) {
+export async function create(data: INotification) {
   try {
     await client.connect();
     const notification = client.db(dbName).collection("notifications").insertOne(data);

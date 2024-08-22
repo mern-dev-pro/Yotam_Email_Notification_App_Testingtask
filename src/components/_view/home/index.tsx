@@ -5,15 +5,13 @@ import { format } from "date-fns";
 import ActionForNotification from "./_module/actionForNotification";
 import AppContainer from "../../../layouts/container";
 import NotificationManager from "./_module/notificationManager";
-import { client } from "../../../utils/mongo";
+import { get } from "../../../app/api/notification/route";
 
 import styles from "./style.module.scss";
 
 const HomePage = async () => {
   try {
-    await client.connect();
-    const notificationsRes = client.db(process.env.MONGODB_DB_NAME).collection("notifications").find();
-    const notifications = await notificationsRes.toArray();
+    const notifications = await get();
 
     return (
       <section className={styles.wrapper}>
