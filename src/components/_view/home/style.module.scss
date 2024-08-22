@@ -22,14 +22,6 @@
 
     .actions {
       @apply flex items-center gap-4;
-
-      .editButton {
-        @apply text-primary;
-      }
-
-      .deleteButton {
-        @apply text-danger;
-      }
     }
 
     .tableHeader {

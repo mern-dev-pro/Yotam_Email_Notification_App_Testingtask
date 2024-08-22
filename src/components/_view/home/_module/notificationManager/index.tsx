@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import React, { useEffect, useState } from "react";
+import classNames from "classnames";
+import { PencilIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
@@ -47,10 +48,16 @@ const schema = yup.object().shape({
     .required("Emails is a required field"),
 });
 
-const HomePageHeader = () => {
+type Props = {
+  mode?: "create" | "update";
+  id?: string;
+  notification?: { [key: string]: any };
+};
+
+const NotificationManager: React.FC<Props> = ({ mode = "create", id = "", notification }) => {
+  const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   /**
    * Configure react hook form
@@ -60,10 +67,11 @@ const HomePageHeader = () => {
     control,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { interval: "week", intervalDuration: 1, relevancyScore: 0.1, emails: [] },
+    defaultValues: { interval: "week", intervalDuration: 1, relevancyScore: 1 },
   });
   const watchInterval = watch("interval");
 
@@ -83,15 +91,17 @@ const HomePageHeader = () => {
     try {
       setLoading(true);
       var dateForNextDay = new Date();
-      const mappedPlannedDays = (data.day ?? []).map((day: string) => days.findIndex((item) => day === item)).sort();
-      const currentDay = dateForNextDay.getDay();
-      const nearestNextDay = mappedPlannedDays?.find((item: number) => {
-        if (item > currentDay) return true;
-        else false;
-      });
-      dateForNextDay.setDate(
-        dateForNextDay.getDate() + ((nearestNextDay ?? mappedPlannedDays[0] + 7 - dateForNextDay.getDay()) % 7),
-      );
+      if (data.interval === "week") {
+        const mappedPlannedDays = (data.day ?? []).map((day: string) => days.findIndex((item) => day === item)).sort();
+        const currentDay = dateForNextDay.getDay();
+        const nearestNextDay = mappedPlannedDays?.find((item: number) => {
+          if (item > currentDay) return true;
+          else false;
+        });
+        dateForNextDay.setDate(
+          dateForNextDay.getDate() + ((nearestNextDay ?? mappedPlannedDays[0] + 7 - dateForNextDay.getDay()) % 7),
+        );
+      }
 
       const body = {
         ...data,
@@ -99,21 +109,55 @@ const HomePageHeader = () => {
         date: data.date ? new Date(data.date) : new Date(),
         plannedDate: data.date ? new Date(data.date) : dateForNextDay,
       };
-      await fetch("/api/notification", { method: "POST", body: JSON.stringify(body) });
+      if (mode === "update" && id) {
+        await fetch(`/api/notification/${id}`, { method: "PUT", body: JSON.stringify(body) });
+      } else {
+        await fetch("/api/notification", { method: "POST", body: JSON.stringify(body) });
+      }
       toast("A notification plan is saved!");
       setOpenModal(false);
+      router.refresh();
     } catch (error) {
       toast("Failed to create! try again later");
     } finally {
       setLoading(false);
-      router.refresh();
     }
   };
 
+  useEffect(() => {
+    if (mode === "update" && id) {
+      reset({
+        interval: notification?.interval,
+        intervalDuration: notification?.intervalDuration,
+        date: notification?.date,
+        searchString: notification?.searchString,
+        relevancyScore: notification?.relevancyScore,
+        emails: notification?.emails ?? [],
+        day: notification?.day ?? [],
+        time: notification?.time,
+      });
+    }
+  }, [id]);
+
   return (
-    <div className={styles.header}>
-      <AppButton onClick={() => setOpenModal(true)} label="Create" icon={<PlusIcon width={24} />} />
-      <AppModal heading="Create a new notification plan" isOpen={openModal} setIsOpen={setOpenModal}>
+    <div
+      className={classNames(styles.header, {
+        [styles.headerCreate]: mode === "create",
+        [styles.headerUpdate]: mode === "update",
+      })}
+    >
+      {mode === "update" ? (
+        <button className={styles.editButton}>
+          <PencilIcon width={20} onClick={() => setOpenModal(true)} />
+        </button>
+      ) : (
+        <AppButton onClick={() => setOpenModal(true)} label="Create" icon={<PlusIcon width={24} />} />
+      )}
+      <AppModal
+        heading={`${mode === "update" ? "Update" : "Create"} a new notification plan`}
+        isOpen={openModal}
+        setIsOpen={setOpenModal}
+      >
         <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => checkKeyDown(e)}>
           <div className={styles.modalContents}>
             <Controller
@@ -259,4 +303,4 @@ const HomePageHeader = () => {
   );
 };
 
-export default HomePageHeader;
+export default NotificationManager;

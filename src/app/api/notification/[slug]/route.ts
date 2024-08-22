@@ -10,7 +10,14 @@ async function update(data: INotification, id: string) {
     const notification = client
       .db(dbName)
       .collection("notifications")
-      .updateOne({ _id: new ObjectId(id) }, data as INotification);
+      .updateOne(
+        { _id: new ObjectId(id) },
+        {
+          $set: {
+            ...data,
+          },
+        },
+      );
     const array = await notification;
     return array;
   } finally {

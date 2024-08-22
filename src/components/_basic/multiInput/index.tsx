@@ -13,7 +13,7 @@ type Props = {
 
 const AppMultiInput: React.FC<Props> = ({ label, value, onChange, errorMsg = "" }) => {
   const [val, setVal] = useState<string>("");
-  const [selectedList, setSelectedList] = useState<string[]>([]);
+  const [selectedList, setSelectedList] = useState<string[]>(value ?? []);
 
   useEffect(() => {
     onChange(selectedList);

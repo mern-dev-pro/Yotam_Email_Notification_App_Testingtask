@@ -1,13 +1,13 @@
 "use server";
 import React from "react";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { format } from "date-fns";
 
+import ActionForNotification from "./_module/actionForNotification";
 import AppContainer from "../../../layouts/container";
+import NotificationManager from "./_module/notificationManager";
 import { client } from "../../../utils/mongo";
-import HomePageHeader from "./_module/homepageHeader";
 
 import styles from "./style.module.scss";
-import { format } from "date-fns";
 
 const HomePage = async () => {
   try {
@@ -18,12 +18,12 @@ const HomePage = async () => {
     return (
       <section className={styles.wrapper}>
         <AppContainer>
-          <HomePageHeader />
+          <NotificationManager />
           <div className={styles.table}>
             <div className={styles.tableHeader}>
               <div>Interval</div>
               <div className={styles.date}>Date</div>
-              <div>Time</div>
+              <div>Next Date</div>
               <div className={styles.query}>Search Query</div>
               <div className={styles.emails}>Emails</div>
               <div className={styles.score}>Relevancy Score</div>
@@ -38,17 +38,15 @@ const HomePage = async () => {
                       ? format(notification.date ?? "", "MM/dd/yyyy")
                       : notification?.day?.join(", ")}
                   </div>
-                  <div>{notification?.time ? format(notification?.time, "HH:mm") : ""}</div>
+                  <div>{notification?.plannedDate ? format(notification?.plannedDate, "MM/dd/yyyy") : ""}</div>
                   <div className={styles.query}>{notification?.searchString}</div>
                   <div className={styles.emails}>{notification?.emails?.join(", ")}</div>
                   <div className={styles.score}>{notification?.relevancyScore}</div>
                   <div className={styles.actions}>
-                    <button className={styles.editButton}>
-                      <PencilIcon width={24} />
-                    </button>
-                    <button className={styles.deleteButton}>
-                      <TrashIcon width={24} />
-                    </button>
+                    <ActionForNotification
+                      id={notification?._id.toString()}
+                      notification={JSON.parse(JSON.stringify(notification))}
+                    />
                   </div>
                 </div>
               ))}

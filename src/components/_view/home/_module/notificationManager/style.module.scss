@@ -1,5 +1,15 @@
 .header {
-  @apply flex items-end justify-end;
+  &.headerCreate {
+    @apply w-full flex justify-end;
+  }
+
+  &.headerUpdate {
+    @apply w-fit;
+  }
+
+  .editButton {
+    @apply text-primary;
+  }
 }
 
 .modalContents {

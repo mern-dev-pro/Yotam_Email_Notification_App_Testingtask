@@ -1,0 +1,11 @@
+.editButton {
+  @apply text-primary;
+}
+
+.deleteButton {
+  @apply text-danger;
+}
+
+.modalButtons {
+  @apply flex justify-center items-center mt-8 gap-4;
+}
