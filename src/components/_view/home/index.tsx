@@ -56,9 +56,8 @@ const HomePage = async () => {
       </section>
     );
   } catch (error) {
-    return <div className={styles.errorScreen}>Something went wrong! DB connection failed</div>;
-  } finally {
     await client.close();
+    return <div className={styles.errorScreen}>Something went wrong! DB connection failed</div>;
   }
 };
 
