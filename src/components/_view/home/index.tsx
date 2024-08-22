@@ -10,7 +10,7 @@ import styles from "./style.module.scss";
 
 const HomePage = async () => {
   try {
-    const notificationRes = await fetch(`${process.env.DOMAIN}/api/notification`, { method: "GET" });
+    const notificationRes = await fetch(`${process.env.DOMAIN}/api/notification`, { method: "GET", cache: "no-cache" });
     const notifications = await notificationRes.json();
 
     return (
