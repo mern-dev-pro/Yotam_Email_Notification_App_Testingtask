@@ -18,8 +18,8 @@ const send = async () => {
     if (currentPlanedDate) {
       try {
         if (notification.interval === "week") {
-          console.log("******Current notification is weekly planned*******");
-          console.log("******Current planned day:", days[currentPlanedDate.getDay()]);
+          console.log("****** Current notification is weekly planned *******");
+          console.log("****** Current planned day:", days[currentPlanedDate.getDay()]);
 
           if (currentPlanedDate.getDay() === today.getDay()) {
             console.log("****** Sending emails...******");
@@ -44,13 +44,33 @@ const send = async () => {
               );
             console.log("****** Next planned date is updated! ******");
             console.log("****** Success! ******");
+          } else {
+            console.log("****** This notification is not planned for today *******");
           }
         }
 
         if (notification.interval === "day") {
-        }
-
-        if (notification.interval === "hour") {
+          if (currentPlanedDate.getDate() === today.getDate() && currentPlanedDate.getMonth() === today.getMonth()) {
+            console.log("****** Sending emails...******");
+            await sendMail(notification.emails, notification.searchString);
+            console.log("****** The emails are sent!******");
+            console.log("****** Updating next planned date! ******");
+            await client
+              .db(dbName)
+              .collection("notifications")
+              .updateOne(
+                { _id: notification._id },
+                {
+                  $set: {
+                    plannedDate: add(currentPlanedDate, { days: notification?.intervalDuration ?? 0 }),
+                  },
+                },
+              );
+            console.log("****** Next planned date is updated! ******");
+            console.log("****** Success! ******");
+          } else {
+            console.log("****** This notification is not planned for today *******");
+          }
         }
       } catch (error: any) {
         console.log("****** Error! ******", error?.body?.message);

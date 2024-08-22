@@ -4,6 +4,7 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import * as yup from "yup";
 
 import AppButton from "../../../../_basic/button";
@@ -13,18 +14,15 @@ import AppModal from "../../../../_module/modal";
 import AppMultiInput from "../../../../_basic/multiInput";
 import AppTextInput from "../../../../_basic/textInput";
 import AppCheckbox from "../../../../_basic/checkbox";
+import { days } from "../../../../../utils/function";
 import { IOption } from "../../../../../utils/type";
 
 import styles from "./style.module.scss";
-import { toast } from "react-toastify";
 
 const intervalOptions: IOption[] = [
   { label: "Week", value: "week" },
   { label: "Day", value: "day" },
-  { label: "Hour", value: "hour" },
 ];
-
-const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
 const schema = yup.object().shape({
   interval: yup.string().required("Interval is a required field"),
@@ -72,19 +70,24 @@ const HomePageHeader = () => {
   const onSubmit = async (data: FieldValues) => {
     try {
       setLoading(true);
+      var dateForNextDay = new Date();
+      const mappedPlannedDays = (data.day ?? []).map((day: string) => days.findIndex((item) => day === item)).sort();
+      dateForNextDay.setDate(dateForNextDay.getDate() + ((mappedPlannedDays[0] + 7 - dateForNextDay.getDay()) % 7));
+
       const body = {
         ...data,
         time: new Date(data.time),
         date: data.date ? new Date(data.date) : new Date(),
-        plannedDate: data.date ? new Date(data.date) : new Date(),
+        plannedDate: data.date ? new Date(data.date) : dateForNextDay,
       };
       await fetch("/api/notification", { method: "POST", body: JSON.stringify(body) });
       toast("A notification plan is saved!");
+      setOpenModal(false);
     } catch (error) {
+      console.log("error: ", error);
       toast("Failed to create! try again later");
     } finally {
       setLoading(false);
-      setOpenModal(false);
       router.refresh();
     }
   };
