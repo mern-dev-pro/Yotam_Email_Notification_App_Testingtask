@@ -72,7 +72,13 @@ const HomePageHeader = () => {
   const onSubmit = async (data: FieldValues) => {
     try {
       setLoading(true);
-      await fetch("/api/notification", { method: "POST", body: JSON.stringify(data) });
+      const body = {
+        ...data,
+        time: new Date(data.time),
+        date: data.date ? new Date(data.date) : new Date(),
+        plannedDate: data.date ? new Date(data.date) : new Date(),
+      };
+      await fetch("/api/notification", { method: "POST", body: JSON.stringify(body) });
       toast("A notification plan is saved!");
     } catch (error) {
       toast("Failed to create! try again later");

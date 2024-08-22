@@ -1,3 +1,5 @@
+export type IDay = "MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN";
+
 export interface IOption {
   label: string;
   value: string;
